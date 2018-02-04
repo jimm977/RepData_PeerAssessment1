@@ -17,6 +17,25 @@ _Block of code:_
 
 ```r
 library(data.table)
+```
+
+```
+## data.table 1.10.4.3
+```
+
+```
+##   The fastest way to learn (by data.table authors): https://www.datacamp.com/courses/data-analysis-the-data-table-way
+```
+
+```
+##   Documentation: ?data.table, example(data.table) and browseVignettes("data.table")
+```
+
+```
+##   Release notes, videos and slides: http://r-datatable.com
+```
+
+```r
 library(ggplot2)
 setwd("i:/CourserA/DATA_SCIENCE/05_ReproducibleResearch/Project1/")
 fileURL<-"https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
@@ -46,7 +65,7 @@ ggplot(data=tDaily, aes(tDaily$V1)) + geom_histogram() +
   labs(title="Fig.1: Step count distribution", x="Number of steps", y="Days with set number of steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
   
   
 ## Step 3. What is the average daily activity pattern?
@@ -72,7 +91,7 @@ ggplot(data=tDayTime, aes(interval, V1)) + geom_line(color="blue")+
   annotate("label", x = 1300, y=150, label=paste("Most active time:", sTimeMaxSteps), size=3, color="red")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
   
   
 ## Step 4. Imputing missing values
@@ -115,7 +134,7 @@ ggplot(data=tMirr[,sum(steps),by=date], aes(V1)) + geom_histogram(fill="cyan") +
        y="Days with set number of steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
   
 ## Step 5. Are there differences in activity patterns between weekdays and weekends?
   
@@ -137,5 +156,5 @@ ggplot(data=tMirr[,mean(steps),by=.(interval,wFlag)], aes(interval, V1, color=fa
   scale_x_continuous(labels = c("00:00", "06:00", "12:00", "18:00", "24:00"), breaks = c(0,600,1200,1800,2400))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
 

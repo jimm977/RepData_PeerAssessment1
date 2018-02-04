@@ -14,7 +14,8 @@ In this peer-graded assessment we are presented with a set of data, containing n
 We start with downloading a zip file from the [course web-site](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip), extracting a csv out of it, and feeding it into a table named ```tMain```. No further transformations seem to be of need at this point.  
   
 _Block of code:_  
-```{r}
+
+```r
 library(data.table)
 library(ggplot2)
 setwd("i:/CourserA/DATA_SCIENCE/05_ReproducibleResearch/Project1/")
@@ -30,7 +31,8 @@ Additionally, we build a graph (histogram), showing how daily total number of st
   
   
 _Block of code:_  
-```{r, message=FALSE}
+
+```r
 tDaily<-tMain[,sum(steps, na.rm=TRUE),by=date]
 iTotalNumberOfSteps<-sum(tDaily$V1)
 iAverageNumberOfSteps<-mean(tDaily$V1)
@@ -43,6 +45,8 @@ ggplot(data=tDaily, aes(tDaily$V1)) + geom_histogram() +
   annotate("label", x = 13000, y=7, label=paste("Median =",round(iMedianNumberOfSteps,1)), size=3, color="blue") +
   labs(title="Fig.1: Step count distribution", x="Number of steps", y="Days with set number of steps")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
   
   
 ## Step 3. What is the average daily activity pattern?
@@ -51,7 +55,8 @@ This time we are investigating the distribution of our variable (number of steps
 We found that most walking activity occurs at `08:35`, probably when our volunteer goes to his/her place of work or study. Unsurprisingly, there's almost no activity at night, from 24:00 to approximately 5:30 a.m.
   
 _Block of code:_  
-```{r}
+
+```r
 tDayTime<-tMain[,sum(steps, na.rm=TRUE)/61,by=interval]
 iTimeMaxSteps<-tDayTime$interval[which.max(tDayTime$V1)]
 # some unnecessary niceties
@@ -66,6 +71,8 @@ ggplot(data=tDayTime, aes(interval, V1)) + geom_line(color="blue")+
   geom_vline(xintercept = iTimeMaxSteps, color="red") +
   annotate("label", x = 1300, y=150, label=paste("Most active time:", sTimeMaxSteps), size=3, color="red")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
   
   
 ## Step 4. Imputing missing values
@@ -75,7 +82,8 @@ ggplot(data=tDayTime, aes(interval, V1)) + geom_line(color="blue")+
   A new dataset is created (named `tMirr`), and new histogram is built. We can see now that new mean (`10,821`) and median (`11,015`) are much more close to each other than in the original data set. Which is unsurprising, because artificial additional mode (at x=0) now dissolved. Thus, having filled the NA gaps with some values, we made our dataset more analitically attractive.
   
 _Block of code:_  
-```{r, results=FALSE, message=FALSE}
+
+```r
 # 4.1 Counting
 iNAcount<-sum(is.na(tMain$steps))
 iDaysNA<-sum(tMain[,any(is.na(steps)),by=date][[2]])
@@ -106,13 +114,16 @@ ggplot(data=tMirr[,sum(steps),by=date], aes(V1)) + geom_histogram(fill="cyan") +
   labs(title="Fig.3: Step count distribution after the remove of NAs", x="Number of steps", 
        y="Days with set number of steps")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
   
 ## Step 5. Are there differences in activity patterns between weekdays and weekends?
   
   Indeed, as the graph shows, on weekends our volunteer is on the average more active throughout the day. There's no pronounced peak like on weekdays in the morning, and he starts to move around a little bit later.
   
 _Block of code:_  
-```{r}
+
+```r
 tMirr[,wFlag:="weekday"]
 tMirr$wFlag[tMirr$DayWeek%in%c("Sat", "Sun")]<-"weekend"
 # Plotting the graph
@@ -125,4 +136,6 @@ ggplot(data=tMirr[,mean(steps),by=.(interval,wFlag)], aes(interval, V1, color=fa
   theme(axis.text.x = element_text(size=8)) +
   scale_x_continuous(labels = c("00:00", "06:00", "12:00", "18:00", "24:00"), breaks = c(0,600,1200,1800,2400))
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
